@@ -1,0 +1,35 @@
+{
+  "name": "discord",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "local": "serverless offline",
+    "deploy": "serverless deploy"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/node": "^7.14.9",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-flow": "^7.14.5",
+    "flow-bin": "^0.168.0",
+    "serverless": "^2.56.0",
+    "serverless-bundle": "^4.1.0",
+    "serverless-dotenv-plugin": "^3.1.0",
+    "serverless-offline": "^6.8.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.45.0",
+    "@aws-sdk/s3-request-presigner": "^3.45.0",
+    "axios": "^0.21.1",
+    "date-fns": "^2.27.0",
+    "dotenv-defaults": "^3.0.0",
+    "express": "^4.17.1",
+    "serverless-http": "^2.7.0",
+    "snowflake-id-js": "^1.0.1",
+    "tweetnacl": "^1.0.3"
+  }
+}
