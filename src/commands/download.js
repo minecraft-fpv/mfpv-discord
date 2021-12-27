@@ -6,7 +6,7 @@ import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 import {GetObjectCommand, ListObjectsCommand, S3Client} from "@aws-sdk/client-s3";
 import {format, parseISO} from "date-fns";
 
-const EXPIRES_IN_SECONDS = 60 * 15
+const EXPIRES_IN_SECONDS = 60 * 5
 
 export default async function (req: { body: DiscordInteractionRequestBody }, res: any) {
   const {
