@@ -61,7 +61,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
     type: 4,
     data: {
       content: `Your link will expire in ${Math.round(EXPIRES_IN_SECONDS / 60)} minutes.\n${url}`,
-      flags: 1 << 6
+      // flags: 1 << 6
     },
   })
 }

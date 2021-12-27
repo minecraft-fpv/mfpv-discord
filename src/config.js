@@ -1,5 +1,7 @@
 // @flow
 
+import {DiscordInteractionRequestBody} from "./type/discord-type";
+
 require('dotenv-defaults/config')
 
 const {
@@ -37,6 +39,8 @@ export default {
       giveRole: (guildId: string, userId: string, roleId: string) =>
         `https://discord.com/api/v8/guilds/${guildId}/members/${userId}/roles/${roleId}`, // PUT
       removeRole: (guildId: string, userId: string, roleId: string) => `https://discord.com/api/v8/guilds/${guildId}/members/${userId}/roles/${roleId}`, // DELETE
+
+      createFollowupMessage: (interaction: DiscordInteractionRequestBody) => `https://discord.com/api/v8/webhooks/${key.discord.applicationId}/${interaction.token}`
     },
   },
   key,
