@@ -41,7 +41,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
 
     Key = items?.Contents?.[items?.Contents?.length - 1]?.Key
   } else {
-    Key = items?.Contents?.find(item => format(item.LastModified, 'yyyy/MM') === month)?.Key
+    Key = items?.Contents?.find(item => format(item.LastModified, 'yyyy/MM/dd') === month)?.Key
   }
 
   console.log('Key', Key)

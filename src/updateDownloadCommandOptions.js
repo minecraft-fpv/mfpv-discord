@@ -19,8 +19,8 @@ export default async function(req, res) {
   console.log('items', items)
 
   const dates: ?Array<DiscordCommandExampleChoice> = items?.Contents?.map(item => ({
-    name: `${format(item.LastModified, 'yyyy/MM')}`,
-    value: `${format(item.LastModified, 'yyyy/MM')}`
+    name: `${format(item.LastModified, 'yyyy/MM/dd')}`,
+    value: `${format(item.LastModified, 'yyyy/MM/dd')}`
   }))
 
   if (!dates?.length) {
