@@ -2,6 +2,8 @@
 
 This is the source code for the discord bot.
 
+![mfpv_arch](readme.assets/mfpv_arch.png)
+
 ## Commands
 
 ### Download
