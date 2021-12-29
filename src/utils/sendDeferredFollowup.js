@@ -1,8 +1,8 @@
 // @flow
 
-import {postAxios} from "../utils/axiosHelper";
+import {postAxios} from "./axiosHelper";
 import config from "../config";
-import discordHeaders from "../utils/discordHeaders";
+import discordHeaders from "./discordHeaders";
 import type {DiscordInteractionRequestBody} from "../type/discord-type";
 
 export default async function(interaction: DiscordInteractionRequestBody, content: string) {

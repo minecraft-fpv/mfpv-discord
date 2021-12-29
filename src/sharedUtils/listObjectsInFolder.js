@@ -4,7 +4,7 @@ import getS3Client from "./getS3Client";
 import {ListObjectsCommand} from "@aws-sdk/client-s3";
 import config from "../config";
 
-type S3Object = {
+export type S3Object = {
   Key: string,
   LastModified: Date,
   ETag: string,

@@ -23,7 +23,7 @@ functions:
   updateCommandsEvent:
     handler: src/handlers/updateCommandsHandler.handler
     events:
-      - schedule: cron(10 4 * * ? *) # 10 minutes after mfpv-backup todo: link to mfpv-backup line in github.
+      - schedule: cron(10 4 * * ? *) # 10 minutes after mfpv-backup https://github.com/minecraft-fpv/mfpv-backup/blob/master/serverless.yml#L35
       - http:
           path: /update_commands
           method: ANY

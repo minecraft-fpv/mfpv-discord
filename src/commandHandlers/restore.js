@@ -4,6 +4,7 @@ import type {DiscordInteractionRequestBody} from "../type/discord-type";
 import config from "../config";
 import {postAxios} from "../utils/axiosHelper";
 import discordHeaders from "../utils/discordHeaders";
+import {format} from "date-fns";
 
 /**
  * 1. A list of date options was presented by registerRestoreCommand.js
@@ -29,7 +30,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
 
   console.log('restore')
 
-  const date = data?.options?.[0]?.value ?? ''
+  const date: string = data?.options?.[0]?.value?.toString() ?? format(Date.now(), 'yyyy/MM/dd')
   console.log('date', date)
 
   const userId = member?.user?.id
@@ -58,7 +59,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
   return res.status(200).json({
     type: 4,
     data: {
-      content: `The restore has started.`,
+      content: `The restore has started.\nDate: ${date}`,
       flags: 1 << 6
     },
   })

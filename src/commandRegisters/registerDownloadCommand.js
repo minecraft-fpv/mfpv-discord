@@ -6,10 +6,13 @@ import discordHeaders from "../utils/discordHeaders";
 import {format} from "date-fns";
 import type {DiscordCommandExampleChoice} from "../type/discord-type";
 import listObjectsInFolder from "../sharedUtils/listObjectsInFolder";
+import {lastModifiedAsc} from "../utils/findChosenSnapshotKey";
 
 export default async function(req: any, res: any): any {
   const items = await listObjectsInFolder(config.aws.folderPrefix.worldSnapshots)
   console.log('items', items)
+
+  items?.sort((a, b) => lastModifiedAsc(b, a)) // DESC
 
   const dates: ?Array<DiscordCommandExampleChoice> = items?.map(item => ({
     name: `${format(item.LastModified, 'yyyy/MM/dd')}`,
@@ -32,7 +35,7 @@ export default async function(req: any, res: any): any {
         name: 'date',
         description: `Which snapshot do you want?`,
         type: 3,
-        required: false,
+        required: true,
         choices: dates,
       },
     ],

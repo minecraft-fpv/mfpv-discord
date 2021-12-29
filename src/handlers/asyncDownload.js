@@ -5,7 +5,7 @@ import config from "../config"
 import discordHeaders from "../utils/discordHeaders"
 import makeApiGatewayResponse from "../utils/makeApiGatewayResponse"
 import type {DiscordInteractionRequestBody} from "../type/discord-type";
-import sendDeferredFollowup from "../sharedUtils/sendDeferredFollowup";
+import sendDeferredFollowup from "../utils/sendDeferredFollowup";
 import {GetObjectCommand} from "@aws-sdk/client-s3";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 import getS3Client from "../sharedUtils/getS3Client";
@@ -17,18 +17,22 @@ exports.handler = async function(req: { body: {
     key: string
   } }): any {
   console.log('event', req)
+  const key = req.body.key
   try {
     const client = getS3Client()
 
     const getCommand = new GetObjectCommand({
       Bucket: config.aws.bucket,
-      Key: req.body.key
+      Key: key
     })
     const url = await getSignedUrl(client, getCommand, { expiresIn: EXPIRES_IN_SECONDS });
 
     console.log('url', url)
 
-    const message = `Your link will expire in ${Math.round(EXPIRES_IN_SECONDS / 60)} minutes.\n${url}`
+    const lastSlashIndex = key.lastIndexOf('/')
+    const filename = key.slice(lastSlashIndex + 1)
+
+    const message = `\`${filename}\`\n${url}`
     console.log(message)
 
     await sendDeferredFollowup(req.body.interaction, message)

@@ -7,6 +7,8 @@ import {GetObjectCommand, ListObjectsCommand, S3Client} from "@aws-sdk/client-s3
 import {format, parseISO} from "date-fns";
 import getS3Client from "../sharedUtils/getS3Client";
 import {postAxios} from "../utils/axiosHelper";
+import findChosenSnapshotKey from "../utils/findChosenSnapshotKey";
+import listObjectsInFolder from "../sharedUtils/listObjectsInFolder";
 
 
 
@@ -25,28 +27,13 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
 
   if (data?.name !== 'download' || data?.type !== 1) return
 
-  const month = data?.options?.[0]?.value ?? ''
+  const date: string = data?.options?.[0]?.value?.toString() ?? format(Date.now(), 'yyyy/MM/dd')
+  console.log('date', date)
 
-  const client = getS3Client()
-
-  const items = await client.send(
-    new ListObjectsCommand({
-      Bucket: config.aws.bucket,
-      // ExpectedBucketOwner: (await client.config.credentials()).accessKeyId,
-    })
-  )
+  const items = await listObjectsInFolder(config.aws.folderPrefix.worldSnapshots)
   console.log('items', items)
 
-  let Key
-  if (!month) {
-    items?.Contents?.sort(lastModifiedAscComparator)
-
-    Key = items?.Contents?.[items?.Contents?.length - 1]?.Key
-  } else {
-    Key = items?.Contents?.find(item => format(item.LastModified, 'yyyy/MM/dd') === month)?.Key
-  }
-
-  console.log('Key', Key)
+  const Key = findChosenSnapshotKey(date, items)
   if (!Key) {
     throw new Error('Could not find key.')
   }
@@ -68,17 +55,4 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
       // flags: 1 << 6
     },
   })
-}
-
-function lastModifiedAscComparator(a, b) {
-  const timeA = parseISO(a.LastModified)
-  const timeB = parseISO(b.LastModified)
-
-  if (timeA < timeB) {
-    return - 1
-  }
-  if (timeA > timeB) {
-    return 1
-  }
-  return 0
 }

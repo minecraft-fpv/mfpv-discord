@@ -27,7 +27,6 @@
     "@aws-sdk/s3-request-presigner": "^3.45.0",
     "axios": "^0.21.1",
     "date-fns": "^2.27.0",
-    "discord.js": "^13.4.0",
     "dotenv-defaults": "^3.0.0",
     "express": "^4.17.1",
     "serverless-http": "^2.7.0",
