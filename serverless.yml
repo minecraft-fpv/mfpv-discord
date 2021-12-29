@@ -27,6 +27,20 @@ functions:
       - http:
           path: /update_commands
           method: ANY
+  asyncDownload: # interactions must respond immediately. Async work is passed to this lambda.
+    handler: src/handlers/asyncDownload.handler
+    events:
+      - http:
+          path: /async_download
+          method: ANY
+          async: true
+  asyncRestore: # interactions must respond immediately. Async work is passed to this lambda.
+    handler: src/handlers/asyncRestore.handler
+    events:
+      - http:
+          path: /async_restore
+          method: ANY
+          async: true
 
 plugins:
   - serverless-bundle # Package our functions with Webpack

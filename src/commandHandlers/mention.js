@@ -5,7 +5,7 @@ import { postAxios, putAxios } from '../utils/axiosHelper'
 import config from '../config'
 import discordHeaders from '../utils/discordHeaders'
 
-export default async function (req: any, res: any) {
+export default async function (req: any, res: any): any {
   const {
     application_id,
     guild_id,

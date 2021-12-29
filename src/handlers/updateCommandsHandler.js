@@ -1,11 +1,13 @@
 // @flow
 
 import makeApiGatewayResponse from "../utils/makeApiGatewayResponse"
-import updateDownloadCommandOptions from "../updateDownloadCommandOptions";
+import registerDownloadCommand from "../commandRegisters/registerDownloadCommand";
+import registerRestoreCommand from "../commandRegisters/registerRestoreCommand";
 
 exports.handler = async function(event: any): any {
   try {
-    await updateDownloadCommandOptions()
+    await registerDownloadCommand()
+    await registerRestoreCommand()
 
     return makeApiGatewayResponse(200, 'OK')
   } catch (err) {

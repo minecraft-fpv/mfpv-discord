@@ -5,7 +5,7 @@ import config from '../config'
 import discordHeaders from '../utils/discordHeaders'
 import getSelectedRole from '../utils/getSelectedRole'
 
-export default async function (req: any, res: any) {
+export default async function (req: any, res: any): any {
   const {
     application_id,
     guild_id,

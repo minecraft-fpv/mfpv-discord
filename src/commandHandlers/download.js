@@ -5,10 +5,12 @@ import config from '../config'
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 import {GetObjectCommand, ListObjectsCommand, S3Client} from "@aws-sdk/client-s3";
 import {format, parseISO} from "date-fns";
+import getS3Client from "../sharedUtils/getS3Client";
+import {postAxios} from "../utils/axiosHelper";
 
-const EXPIRES_IN_SECONDS = 60 * 5
 
-export default async function (req: { body: DiscordInteractionRequestBody }, res: any) {
+
+export default async function (req: { body: DiscordInteractionRequestBody }, res: any): any {
   const {
     application_id,
     guild_id,
@@ -25,7 +27,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
 
   const month = data?.options?.[0]?.value ?? ''
 
-  const client = getClient()
+  const client = getS3Client()
 
   const items = await client.send(
     new ListObjectsCommand({
@@ -49,35 +51,23 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
     throw new Error('Could not find key.')
   }
 
-  const getCommand = new GetObjectCommand({
-    Bucket: config.aws.bucket,
-    Key
-  })
-  const url = await getSignedUrl(client, getCommand, { expiresIn: EXPIRES_IN_SECONDS });
-
-  console.log('url', url)
+  // Trigger asyncDownload lambda:
+  await postAxios(
+    `${config.mfpv.discordBotBaseUrl}${config.mfpv.asyncDownload}`,
+    { // asyncDownload will receive this payload:
+      interaction: req.body,
+      key: Key
+    }
+  )
 
   return res.status(200).json({
     type: 4,
     data: {
-      content: `Your link will expire in ${Math.round(EXPIRES_IN_SECONDS / 60)} minutes.\n${url}`,
+      content: 'A link has been generated.'
+      // content: `Your link will expire in ${Math.round(EXPIRES_IN_SECONDS / 60)} minutes.\n${url}`,
       // flags: 1 << 6
     },
   })
-}
-
-function getClient() {
-  // const provider = defaultProvider({
-  //   profile: config.aws.profile,
-  // })
-  const client = new S3Client({
-    region: config.aws.region,
-    credentials: {
-      accessKeyId: config.aws.accessKeyId,
-      secretAccessKey: config.aws.secretAccessKey
-    }
-  })
-  return client
 }
 
 function lastModifiedAscComparator(a, b) {
