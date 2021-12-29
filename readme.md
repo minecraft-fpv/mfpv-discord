@@ -1,3 +1,17 @@
 # mfpv-discord
 
 This is the source code for the discord bot.
+
+## Commands
+
+### Download
+
+![download-1](/Users/taylor/Documents/hobby/minecraft/mfpv-discord/readme.assets/download-1.png)
+
+![download-2](/Users/taylor/Documents/hobby/minecraft/mfpv-discord/readme.assets/download-2.png)
+
+### Restore
+
+![restore-1](/Users/taylor/Documents/hobby/minecraft/mfpv-discord/readme.assets/restore-1.png)
+
+![restore-2](/Users/taylor/Documents/hobby/minecraft/mfpv-discord/readme.assets/restore-2-0775871.png)
