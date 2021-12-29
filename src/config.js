@@ -17,7 +17,18 @@ const {
   MFPV_AWS_ACCESS_KEY_ID,
   MFPV_AWS_SECRET_ACCESS_KEY,
   MFPV_DISCORD_ROLE_ID_RESTORE_COMMAND,
+  MFPV_BACKUP_BASE_URL,
   MFPV_DISCORD_BOT_BASE_URL,
+  MFPV_DB_HOST,
+  MFPV_DB_PORT,
+  MFPV_DB_USER,
+  MFPV_DB_PASS,
+  MFPV_DB_DATABASE,
+  MFPV_JAVA_SERVER_HOST,
+  MFPV_JAVA_SERVER_PORT,
+  MFPV_JAVA_SERVER_USERNAME,
+  MFPV_JAVA_SERVER_PASSWORD,
+  MFPV_RESTORE_REDIRECT
 } = process.env
 
 const key: {[string]: {[string]: string}} = {
@@ -30,10 +41,26 @@ const key: {[string]: {[string]: string}} = {
 }
 
 export default {
+  restoreRedirect: MFPV_RESTORE_REDIRECT,
   mfpv: {
     discordBotBaseUrl: ((MFPV_DISCORD_BOT_BASE_URL || ''): string),
+    backupBaseUrl: ((MFPV_BACKUP_BASE_URL || ''): string),
     asyncRestore: '/async_restore',
-    asyncDownload: '/async_download'
+    asyncDownload: '/async_download',
+    backupDataSync: '/backup_data_sync'
+  },
+  java: {
+    host: MFPV_JAVA_SERVER_HOST,
+    port: MFPV_JAVA_SERVER_PORT,
+    username: MFPV_JAVA_SERVER_USERNAME,
+    password: MFPV_JAVA_SERVER_PASSWORD
+  },
+  db: {
+    host: MFPV_DB_HOST,
+    port: MFPV_DB_PORT,
+    username: MFPV_DB_USER,
+    password: MFPV_DB_PASS,
+    database: MFPV_DB_DATABASE,
   },
   discord: {
     api: {
@@ -66,5 +93,5 @@ export default {
       worldSnapshots: MFPV_AWS_FOLDER_PREFIX_WORLD_SNAPSHOTS,
       dbSnapshots: MFPV_AWS_FOLDER_PREFIX_DB_RESTORE_SCRIPTS
     }
-  }
+  },
 }

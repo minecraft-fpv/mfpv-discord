@@ -1,6 +1,6 @@
 // @flow
 
-export default function(statusCode: number, payload: any) {
+export default function(statusCode: number, payload: any): any {
   return {
     "statusCode": statusCode,
     "headers": {

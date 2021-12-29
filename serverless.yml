@@ -36,6 +36,8 @@ functions:
           async: true
   asyncRestore: # interactions must respond immediately. Async work is passed to this lambda.
     handler: src/handlers/asyncRestore.handler
+#    memorySize: 2048 # optional, in MB, default is 1024
+    timeout: 120 # optional, in seconds
     events:
       - http:
           path: /async_restore

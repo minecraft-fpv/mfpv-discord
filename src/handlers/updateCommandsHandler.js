@@ -1,6 +1,6 @@
 // @flow
 
-import makeApiGatewayResponse from "../utils/makeApiGatewayResponse"
+import makeApiGatewayResponse from "../sharedUtils/makeApiGatewayResponse"
 import registerDownloadCommand from "../commandRegisters/registerDownloadCommand";
 import registerRestoreCommand from "../commandRegisters/registerRestoreCommand";
 

@@ -3,7 +3,7 @@
 import {postAxios} from "../utils/axiosHelper"
 import config from "../config"
 import discordHeaders from "../utils/discordHeaders"
-import makeApiGatewayResponse from "../utils/makeApiGatewayResponse"
+import makeApiGatewayResponse from "../sharedUtils/makeApiGatewayResponse"
 import type {DiscordInteractionRequestBody} from "../type/discord-type";
 import sendDeferredFollowup from "../utils/sendDeferredFollowup";
 import {GetObjectCommand} from "@aws-sdk/client-s3";
