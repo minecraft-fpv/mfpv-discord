@@ -17,9 +17,9 @@ export default async function(guild_id: string, language: string): Promise<Disco
   if (selectedRole.permissions !== '0') {
     throw new Error(`That role has elevated permissions. ${language}. ${JSON.stringify(selectedRole)}`)
   }
-  const foundChoice = languageChoices.find(choice => choice.name === selectedRole.name)
-  if (!foundChoice) {
-    throw new Error(`That role was not one of the choices. ${language}`)
-  }
+  // const foundChoice = languageChoices.find(choice => choice.name === selectedRole.name)
+  // if (!foundChoice) {
+  //   throw new Error(`That role was not one of the choices. ${language}`)
+  // }
   return selectedRole
 }

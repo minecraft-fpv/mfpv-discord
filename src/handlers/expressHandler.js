@@ -12,6 +12,7 @@ import mention from '../commandHandlers/mention'
 import download from "../commandHandlers/download";
 import updateDownloadCommandOptions from "../commandRegisters/registerDownloadCommand";
 import restore from "../commandHandlers/restore";
+import cool from "../commandHandlers/cool";
 
 const app = express();
 
@@ -74,6 +75,7 @@ app.post("/interactions", async (req: {
 
     await lang(req, res)
     await mention(req, res)
+    await cool(req, res)
     await download(req, res)
     await restore(req, res)
   } catch (err) {
