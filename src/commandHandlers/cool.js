@@ -37,7 +37,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
     return res.status(200).json({
       type: 4,
       data: {
-        content: `${username} isn't cool anymore.`,
+        content: `${username} has lost their cool. Will they regain it?`,
         // flags: 1 << 6 // Only the user receiving can see.
       },
     })
