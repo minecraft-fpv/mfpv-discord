@@ -6,6 +6,9 @@ import discordHeaders from '../utils/discordHeaders'
 import getSelectedRole from '../utils/getSelectedRole'
 import type {DiscordInteractionRequestBody} from "../type/discord-type";
 import nonMaybe from 'non-maybe'
+import mysql from "mysql";
+import makeQuery from "../sharedUtils/makeQuery";
+import sqltag from "sql-template-tag";
 
 export default async function (req: { body: DiscordInteractionRequestBody }, res: any): any {
   const {
@@ -34,14 +37,29 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
       config.discord.api.removeRole(guild_id, userId, selectedRole.id),
       discordHeaders
     )
+
+    await markUncool(userId)
+
     return res.status(200).json({
       type: 4,
       data: {
-        content: `${username} has lost their cool. Will they regain it?`,
+        content: `${username} has lost their cool. How will they regain it?`,
         // flags: 1 << 6 // Only the user receiving can see.
       },
     })
   } else {
+    const isUncool = await checkUncool(userId)
+
+    if (isUncool) {
+      return res.status(200).json({
+        type: 4,
+        data: {
+          content: `You lost your cool. How will you regain it?`,
+          flags: 1 << 6 // Only the user receiving can see.
+        },
+      })
+    }
+
     await putAxios(
       config.discord.api.giveRole(guild_id, userId, selectedRole.id),
       {},
@@ -54,5 +72,58 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
         // flags: 1 << 6 // Only the user receiving can see.
       },
     })
+  }
+}
+
+async function markUncool(userId: string) {
+  try {
+    const connection = mysql.createConnection({
+      host: config.db.host,
+      port: config.db.port,
+      user: config.db.username,
+      password: config.db.password,
+      database: config.db.database,
+      multipleStatements: true
+    })
+    const query = makeQuery(connection)
+    const sql = sqltag`
+        INSERT INTO Cool (
+          coolId,
+          userId,
+          isUncool,
+          dateUpdated
+        ) VALUES (
+          UNHEX(REPLACE(UUID(),'-','')),
+          ${userId},
+          TRUE,
+          CURRENT_TIMESTAMP
+        ) ON DUPLICATE KEY UPDATE -- userId
+          isUncool = TRUE,
+          dateUpdated = CURRENT_TIMESTAMP;
+      `
+    await query(sql)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function checkUncool(userId: string) {
+  try {
+    const connection = mysql.createConnection({
+      host: config.db.host,
+      port: config.db.port,
+      user: config.db.username,
+      password: config.db.password,
+      database: config.db.database,
+      multipleStatements: true
+    })
+    const query = makeQuery(connection)
+    const sql = sqltag`
+      SELECT * FROM Cool WHERE userId = ${userId};    
+    `
+    const rows = await query(sql)
+    return rows?.[0]
+  } catch (err) {
+    console.error(err)
   }
 }
