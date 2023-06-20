@@ -1,25 +1,23 @@
 service: mfpv-discord
 
-frameworkVersion: '2'
+frameworkVersion: '3'
 
+useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs18.x
   lambdaHashingVersion: '20201221'
   apiGateway:
     shouldStartNameWithService: true
 
 functions:
-  express:
-    handler: src/handlers/expressHandler.handler
+  interactions:
+    handler: src/handlers/interactionsHandler.handler
     events:
       - http:
-          path: /
-          method: ANY
-      - http:
-          path: /{proxy+}
-          method: ANY
+          path: /interactions
+          method: POST
   updateCommandsEvent:
     handler: src/handlers/updateCommandsHandler.handler
     events:

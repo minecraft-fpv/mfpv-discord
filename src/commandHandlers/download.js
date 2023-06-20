@@ -9,10 +9,11 @@ import getS3Client from "../sharedUtils/getS3Client";
 import {postAxios} from "../utils/axiosHelper";
 import findChosenSnapshotKey from "../utils/findChosenSnapshotKey";
 import listObjectsInFolder from "../sharedUtils/listObjectsInFolder";
+import makeApiGatewayResponse from "../sharedUtils/makeApiGatewayResponse.js"
 
 
 
-export default async function (req: { body: DiscordInteractionRequestBody }, res: any): any {
+export default async function (body: DiscordInteractionRequestBody, res: any): any {
   const {
     application_id,
     guild_id,
@@ -21,7 +22,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
     data,
     member,
     token,
-  } = req.body
+  } = body
 
   console.log('data', data)
 
@@ -42,12 +43,12 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
   await postAxios(
     `${config.mfpv.discordBotBaseUrl}${config.mfpv.asyncDownload}`,
     { // asyncDownload will receive this payload:
-      interaction: req.body,
+      interaction: body,
       key: Key
     }
   )
 
-  return res.status(200).json({
+  return makeApiGatewayResponse(200, {
     type: 4,
     data: {
       content: 'A link has been generated.'
@@ -55,4 +56,12 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
       // flags: 1 << 6
     },
   })
+  // return res.status(200).json({
+  //   type: 4,
+  //   data: {
+  //     content: 'A link has been generated.'
+  //     // content: `Your link will expire in ${Math.round(EXPIRES_IN_SECONDS / 60)} minutes.\n${url}`,
+  //     // flags: 1 << 6
+  //   },
+  // })
 }

@@ -16,7 +16,7 @@ exports.handler = async function(req: { body: {
     interaction: DiscordInteractionRequestBody,
     key: string
   } }): any {
-  console.log('event', req)
+  console.log("req.body", req.body)
   const key = req.body.key
   try {
     const client = getS3Client()

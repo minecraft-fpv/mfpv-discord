@@ -9,8 +9,9 @@ import nonMaybe from 'non-maybe'
 import mysql from "mysql";
 import makeQuery from "../sharedUtils/makeQuery";
 import sqltag from "sql-template-tag";
+import makeApiGatewayResponse from "../sharedUtils/makeApiGatewayResponse.js"
 
-export default async function (req: { body: DiscordInteractionRequestBody }, res: any): any {
+export default async function (body: DiscordInteractionRequestBody, res: any): any {
   const {
     application_id,
     // guild_id,
@@ -19,8 +20,8 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
     data,
     member,
     token,
-  } = req.body
-  const guild_id = nonMaybe(req.body.guild_id)
+  } = body
+  const guild_id = nonMaybe(body.guild_id)
 
   console.log('data', data)
 
@@ -40,24 +41,38 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
 
     await markUncool(userId)
 
-    return res.status(200).json({
+    return makeApiGatewayResponse(200, {
       type: 4,
       data: {
         content: `${username} has lost their cool. How will they regain it?`,
         // flags: 1 << 6 // Only the user receiving can see.
       },
     })
+    // return res.status(200).json({
+    //   type: 4,
+    //   data: {
+    //     content: `${username} has lost their cool. How will they regain it?`,
+    //     // flags: 1 << 6 // Only the user receiving can see.
+    //   },
+    // })
   } else {
     const isUncool = await checkUncool(userId)
 
     if (isUncool) {
-      return res.status(200).json({
+      return makeApiGatewayResponse(200, {
         type: 4,
         data: {
           content: `You lost your cool. How will you regain it?`,
           flags: 1 << 6 // Only the user receiving can see.
         },
       })
+      // return res.status(200).json({
+      //   type: 4,
+      //   data: {
+      //     content: `You lost your cool. How will you regain it?`,
+      //     flags: 1 << 6 // Only the user receiving can see.
+      //   },
+      // })
     }
 
     await putAxios(
@@ -65,13 +80,20 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
       {},
       discordHeaders
     )
-    return res.status(200).json({
+    return makeApiGatewayResponse(200, {
       type: 4,
       data: {
         content: `${username} is pretty cool.`,
         // flags: 1 << 6 // Only the user receiving can see.
       },
     })
+    // return res.status(200).json({
+    //   type: 4,
+    //   data: {
+    //     content: `${username} is pretty cool.`,
+    //     // flags: 1 << 6 // Only the user receiving can see.
+    //   },
+    // })
   }
 }
 

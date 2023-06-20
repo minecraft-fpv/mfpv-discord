@@ -28,7 +28,8 @@ const {
   MFPV_JAVA_SERVER_PORT,
   MFPV_JAVA_SERVER_USERNAME,
   MFPV_JAVA_SERVER_PASSWORD,
-  MFPV_RESTORE_REDIRECT
+  MFPV_RESTORE_REDIRECT,
+  IS_OFFLINE
 } = process.env
 
 const key: {[string]: {[string]: string}} = {
@@ -43,7 +44,7 @@ const key: {[string]: {[string]: string}} = {
 export default {
   restoreRedirect: MFPV_RESTORE_REDIRECT,
   mfpv: {
-    discordBotBaseUrl: ((MFPV_DISCORD_BOT_BASE_URL || ''): string),
+    discordBotBaseUrl: IS_OFFLINE ? 'https:localhost:4000/dev' : ((MFPV_DISCORD_BOT_BASE_URL || ''): string),
     backupBaseUrl: ((MFPV_BACKUP_BASE_URL || ''): string),
     asyncRestore: '/async_restore',
     asyncDownload: '/async_download',

@@ -28,14 +28,20 @@ app.get("/", (req, res, next) => {
   });
 });
 
-app.get('/update_commands', async (req, res, next) => {
-  try {
-    await updateDownloadCommandOptions(req, res)
-  } catch (err) {
-    console.error(err)
-    return res.status(400)
-  }
-})
+// app.get('/update_commands', async (req, res, next) => {
+//   try {
+//     await updateDownloadCommandOptions(req, res)
+//   } catch (err) {
+//     console.error(err)
+//     return res.status(400)
+//   }
+// })
+
+// app.post('/dev/interactions', async (req, res) => {
+//   return res.status(200).json({
+//     message: "Hello from /dev/interactions",
+//   });
+// })
 
 app.post("/interactions", async (req: {
   body: DiscordInteractionRequestBody

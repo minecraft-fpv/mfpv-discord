@@ -4,8 +4,10 @@ import getSelectedRole from '../utils/getSelectedRole'
 import { postAxios, putAxios } from '../utils/axiosHelper'
 import config from '../config'
 import discordHeaders from '../utils/discordHeaders'
+import type { DiscordInteractionRequestBody } from "../type/discord-type.js"
+import makeApiGatewayResponse from "../sharedUtils/makeApiGatewayResponse.js"
 
-export default async function (req: any, res: any): any {
+export default async function (body: DiscordInteractionRequestBody, res: any): any {
   const {
     application_id,
     guild_id,
@@ -14,7 +16,7 @@ export default async function (req: any, res: any): any {
     data,
     member,
     token,
-  } = req.body
+  } = body
 
   if (data?.name !== 'mention' || data?.type !== 1) return
 
@@ -31,22 +33,34 @@ export default async function (req: any, res: any): any {
     //   {},
     //   discordHeaders
     // )
-
-    return res.status(200).json({
+    return makeApiGatewayResponse(200, {
       type: 4,
       data: {
         content: `❌ You must first join **@${language}** by using **/lang**.`,
         flags: 1 << 6 // Only the user receiving can see.
       },
     })
+    // return res.status(200).json({
+    //   type: 4,
+    //   data: {
+    //     content: `❌ You must first join **@${language}** by using **/lang**.`,
+    //     flags: 1 << 6 // Only the user receiving can see.
+    //   },
+    // })
   }
 
-  return res.status(200).json({
+  return makeApiGatewayResponse(200, {
     type: 4,
     data: {
       content: `<@&${selectedRole.id}>`,
     },
   })
+  // return res.status(200).json({
+  //   type: 4,
+  //   data: {
+  //     content: `<@&${selectedRole.id}>`,
+  //   },
+  // })
 
   // await postAxios(
   //   config.discord.api.createMessage(channel_id),

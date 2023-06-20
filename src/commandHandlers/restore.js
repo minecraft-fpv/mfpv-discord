@@ -5,6 +5,7 @@ import config from "../config";
 import {postAxios} from "../utils/axiosHelper";
 import discordHeaders from "../utils/discordHeaders";
 import {format} from "date-fns";
+import makeApiGatewayResponse from "../sharedUtils/makeApiGatewayResponse.js"
 
 /**
  * 1. A list of date options was presented by registerRestoreCommand.js
@@ -15,7 +16,7 @@ import {format} from "date-fns";
  * 6. Run the db restore script, which will drop existing tables.
  * 7. Via manual process: Log into panel and restore from the backup .zip file and restart the server.
  * */
-export default async function (req: { body: DiscordInteractionRequestBody }, res: any): any {
+export default async function (body: DiscordInteractionRequestBody, res: any): any {
   const {
     application_id,
     guild_id,
@@ -24,7 +25,7 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
     data,
     member,
     token,
-  } = req.body
+  } = body
 
   if (data?.name !== 'restore' || data?.type !== 1) return
 
@@ -41,13 +42,20 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
   console.log('member?.roles', member?.roles)
 
   if (!hasRole) {
-    return res.status(200).json({
+    return makeApiGatewayResponse(200, {
       type: 4,
       data: {
         content: `❌ Sorry, you cannot do that.`,
         flags: 1 << 6 // Only the user receiving can see.
       },
     })
+    // return res.status(200).json({
+    //   type: 4,
+    //   data: {
+    //     content: `❌ Sorry, you cannot do that.`,
+    //     flags: 1 << 6 // Only the user receiving can see.
+    //   },
+    // })
   }
 
   // Trigger asyncRestore lambda:
@@ -56,11 +64,18 @@ export default async function (req: { body: DiscordInteractionRequestBody }, res
     req.body
   )
 
-  return res.status(200).json({
+  return makeApiGatewayResponse(200, {
     type: 4,
     data: {
       content: `The restore has started.\nDate: ${date}`,
       flags: 1 << 6
     },
   })
+  // return res.status(200).json({
+  //   type: 4,
+  //   data: {
+  //     content: `The restore has started.\nDate: ${date}`,
+  //     flags: 1 << 6
+  //   },
+  // })
 }
